@@ -1,25 +1,18 @@
-require 'sinatra/base'
+require 'sinatra'
 require 'data_mapper'
-require 'capybara/rspec'
-
-env = ENV['RACK_ENV'] || 'development'
-
-
-
-
-DataMapper.setup(:default, "postgres://localhost/bookmark_manager_#{env}")
-
+#require 'capybara/rspec'
 require './lib/link'
 require './lib/tag'
-
-DataMapper.finalize
-
-DataMapper.auto_upgrade!
+require './lib/user'
 
 
 
+#class BookmarkManager < Sinatra::Base
 
-class BookmarkManager < Sinatra::Base
+  require_relative 'helpers/application'
+  require_relative 'data_mapper_setup'
+
+
 
 	enable :sessions
 	set :session_secret, 'super secret'
@@ -57,6 +50,7 @@ class BookmarkManager < Sinatra::Base
   end
 
 
+
   # start the server if ruby file executed directly
   #run! if app_file == $0
-end
+#end
