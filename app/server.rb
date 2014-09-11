@@ -1,10 +1,7 @@
 require 'sinatra'
 require 'data_mapper'
-#require 'capybara/rspec'
-require './lib/link'
-require './lib/tag'
-require './lib/user'
 require 'rack-flash'
+require 'sinatra/partial'
 
 use Rack::Flash
 
@@ -12,15 +9,25 @@ use Rack::Flash
 
 #class BookmarkManager < Sinatra::Base
 
-  require_relative 'helpers/application'
-  require_relative 'data_mapper_setup'
+require_relative 'controllers/users'
+require_relative 'controllers/sessions'
+require_relative 'controllers/links'
+require_relative 'controllers/tags'
+require_relative 'controllers/application'
 
+require_relative 'models/link'
+require_relative 'models/tag'
+require_relative 'models/user'
 
+require_relative 'helpers/application'
+require_relative 'data_mapper_setup'
 
-	enable :sessions
-	set :session_secret, 'super secret'
+enable :sessions
+set :session_secret, 'super secret'
+set :partial_template_engine, :erb
   
-  get '/' do
+=begin
+ get '/' do
   	@links = Link.all
   	erb :index
   end
@@ -75,7 +82,13 @@ use Rack::Flash
     end
   end
 
-  
+  delete '/sessions' do
+    flash[:notice] = "Goodbye!"
+    session[:user_id] = nil
+    redirect to('/')
+  end
+=end
+
 
 
 
