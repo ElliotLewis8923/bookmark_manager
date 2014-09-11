@@ -67,6 +67,14 @@ feature 'User signs out' do
 
 end
 
+feature 'User resets password' do
+
+	scenario 'while on the homepage' do
+		visit('/sessions/new')
+		click_link("Forgotten your password?")
+		expect(page).to have_content("Please enter your email address so that we can send you a unique code to reset your password.")
+	end
+end
 
 
 

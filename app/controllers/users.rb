@@ -15,3 +15,7 @@ get '/users/new' do
       erb :"users/new"
     end
   end
+
+  get '/forgotten_password' do
+    erb :"users/forgotten_password"
+  end
