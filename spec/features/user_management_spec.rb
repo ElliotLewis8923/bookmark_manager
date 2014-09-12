@@ -69,10 +69,24 @@ end
 
 feature 'User resets password' do
 
-	scenario 'while on the homepage' do
+	before(:each) do
+		User.create(:email => "test@test.com",
+								:password => 'test',
+								:password_confirmation => 'test')
+		@user = User.first(:email => "test@test.com")
+	end
+
+	scenario 'while on the login page' do
 		visit('/sessions/new')
 		click_link("Forgotten your password?")
 		expect(page).to have_content("Please enter your email address so that we can send you a unique code to reset your password.")
+	end
+
+	scenario 'create token' do
+		visit('/forgotten_password')
+		fill_in 'email_forgotten_password', :with => @user.email
+		click_button 'Submit'
+		expect(@user.password_token).not_to eq nil
 	end
 end
 

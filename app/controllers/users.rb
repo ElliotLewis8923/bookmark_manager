@@ -19,3 +19,12 @@ get '/users/new' do
   get '/forgotten_password' do
     erb :"users/forgotten_password"
   end
+
+  post '/forgotten_password' do
+    user = User.first(:email => params[:email_forgotten_password])
+    user.password_token = (1..64).map{('A'..'Z').to_a.sample}.join
+    user.password_token_timestamp = Time.now
+    user.save!
+    erb :"users/forgotten_password"
+    flash[:notice] = "An email has been sent to your address."
+  end
