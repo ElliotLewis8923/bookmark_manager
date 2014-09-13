@@ -100,7 +100,6 @@ feature 'User resets password' do
 	scenario 'reset password' do
 		create_user
 		old_password = @user.password_digest
-		User.first('test@test.com').update(:password_token => 'test_token')
 		visit('/users/reset_password/test_token')
 		expect(page).to have_content("Please enter your new password.")
 		fill_in 'new_password', :with => 'new_test'
