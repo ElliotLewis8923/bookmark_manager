@@ -69,15 +69,13 @@ end
 
 feature 'User resets password' do
 
-	#before(:each) do
-	def create_user
-		User.create(
+	before(:each) do
+		@user = User.create(
 							:email => 'test@test.com',
 							:password => 'test',
 							:password_confirmation => 'test',
 							:password_token => 'test_token',
 							:password_token_timestamp => 'test_stamp')
-		@user = User.first('test@test.com')
 	end
 
 	scenario 'while on the login page' do
@@ -87,7 +85,6 @@ feature 'User resets password' do
 	end
 
 	scenario 'create token' do
-		create_user
 		expect(User.first('test@test.com').password_token).to eq 'test_token'
 		visit('/forgotten_password')
 		expect(page).to have_content('Email:')
@@ -98,7 +95,6 @@ feature 'User resets password' do
 	end
 
 	scenario 'reset password' do
-		create_user
 		old_password = @user.password_digest
 		visit('/users/reset_password/test_token')
 		expect(page).to have_content("Please enter your new password.")
