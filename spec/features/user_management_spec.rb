@@ -69,11 +69,15 @@ end
 
 feature 'User resets password' do
 
-	before(:each) do
-		User.create(:email => "test@test.com",
-								:password => 'test',
-								:password_confirmation => 'test')
-		@user = User.first(:email => "test@test.com")
+	#before(:each) do
+	def create_user
+		User.create(
+							:email => 'test@test.com',
+							:password => 'test',
+							:password_confirmation => 'test',
+							:password_token => 'test_token',
+							:password_token_timestamp => 'test_stamp')
+		@user = User.first('test@test.com')
 	end
 
 	scenario 'while on the login page' do
@@ -83,11 +87,29 @@ feature 'User resets password' do
 	end
 
 	scenario 'create token' do
+		create_user
+		expect(User.first('test@test.com').password_token).to eq 'test_token'
 		visit('/forgotten_password')
+		expect(page).to have_content('Email:')
 		fill_in 'email_forgotten_password', :with => @user.email
 		click_button 'Submit'
-		expect(@user.password_token).not_to eq nil
+		expect(User.first('test@test.com').password_token).not_to eq 'test_token'
+		
 	end
+
+	scenario 'reset password' do
+		create_user
+		old_password = @user.password_digest
+		User.first('test@test.com').update(:password_token => 'test_token')
+		visit('/users/reset_password/test_token')
+		expect(page).to have_content("Please enter your new password.")
+		fill_in 'new_password', :with => 'new_test'
+		fill_in 'confirm_new_password', :with => 'new_test'
+		click_button 'Submit'
+		expect(User.first('test@test.com').password_digest == old_password).to be false
+
+	end
+
 end
 
 
