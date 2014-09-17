@@ -2,6 +2,8 @@ require 'sinatra'
 require 'data_mapper'
 require 'rack-flash'
 require 'sinatra/partial'
+require 'mailgun'
+require 'rest-client'
 
 use Rack::Flash
 

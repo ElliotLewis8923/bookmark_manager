@@ -25,6 +25,7 @@ get '/users/new' do
     @user.password_token = (1..64).map{('A'..'Z').to_a.sample}.join
     @user.password_token_timestamp = Time.now
     @user.save!
+    send_email(@user.email.to_str, @user.password_token)
     erb :"users/forgotten_password"
     flash[:notice] = "An email has been sent to your address."
   end

@@ -102,7 +102,6 @@ feature 'User resets password' do
 		fill_in 'confirm_new_password', :with => 'new_test'
 		click_button 'Submit'
 		expect(User.first('test@test.com').password_digest == old_password).to be false
-
 	end
 
 end
